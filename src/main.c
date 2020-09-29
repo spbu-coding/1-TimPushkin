@@ -84,8 +84,8 @@ void print_results(const size_t results_num, char** results) {
     }
 }
 
-void free_results_memory(const size_t results_len, char** results) {
-    for (int i = 0; i < results_len; i++) {
+void free_results_memory(const size_t results_num, char** results) {
+    for (int i = 0; i < results_num; i++) {
         free(results[i]);
     }
     free(results);
