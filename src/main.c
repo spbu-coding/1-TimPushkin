@@ -94,7 +94,7 @@ void print_array_of_strings(const size_t array_len, char** array) {
 }
 
 int main() {
-    const unsigned int steps_nums[] = {5, 10, 20, 100, 500, 1000};
+    const unsigned int steps_nums[] = {6, 10, 20, 100, 500, 1000};
     const size_t tests_num = ARRAY_LEN(steps_nums);
     struct interval_t interval = {0, 0};
     read_interval(&interval);
