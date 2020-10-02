@@ -19,6 +19,13 @@ void error_handle(const char* error_message) {
     exit(1);
 }
 
+void free_array_of_strings(const size_t array_len, char** array) {
+    for (int i = 0; i < array_len; i++) {
+        free(array[i]);
+    }
+    free(array);
+}
+
 double rectangle_rule(const double interval_beg, const double step) {
     return step * sin(interval_beg + step / 2);
 }
@@ -46,6 +53,7 @@ char** create_results(const struct interval_t interval, const size_t tests_num, 
     for (int i = 0; i < tests_num; i++) {
         results_strings[i] = (char*) malloc(MAX_OUTPUT_STR_LEN * sizeof(char));
         if (results_strings[i] == NULL) {
+            free_array_of_strings(tests_num, results_strings);
             error_handle("Memory allocation for a string in results_strings failed");
         }
         area_rectangle = calculate_area(interval, steps_nums[i], rectangle_rule);
@@ -76,19 +84,13 @@ void read_interval(struct interval_t* interval) {
     }
 }
 
-void print_results(const size_t results_num, char** results) {
-    for (int i = 0; i < results_num; i++) {
-        if (printf("%s", results[i]) < 0) {
-            error_handle("Printing results to stdout failed");
+void print_array_of_strings(const size_t array_len, char** array) {
+    for (int i = 0; i < array_len; i++) {
+        if (printf("%s", array[i]) < 0) {
+            free_array_of_strings(array_len, array);
+            error_handle("Printing array of strings to stdout failed");
         }
     }
-}
-
-void free_results_memory(const size_t results_num, char** results) {
-    for (int i = 0; i < results_num; i++) {
-        free(results[i]);
-    }
-    free(results);
 }
 
 int main() {
@@ -96,8 +98,8 @@ int main() {
     const size_t tests_num = ARRAY_LEN(steps_nums);
     struct interval_t interval = {0, 0};
     read_interval(&interval);
-    char** results = create_results(interval, tests_num, steps_nums);
-    print_results(tests_num, results);
-    free_results_memory(tests_num, results);
+    char** results_strings = create_results(interval, tests_num, steps_nums);
+    print_array_of_strings(tests_num, results_strings);
+    free_array_of_strings(tests_num, results_strings);
     return 0;
 }
